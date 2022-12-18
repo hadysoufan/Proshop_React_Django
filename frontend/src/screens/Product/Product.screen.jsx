@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   Row,
@@ -7,15 +7,23 @@ import {
   ListGroup,
   Button,
   Card,
-  ListGroupItem,
 } from "react-bootstrap";
 import Rating from "../../components/Rating/Rating.component";
-import products from "../../products";
+import axios from "axios";
 
-function Prodcut({ match }) {
+function Prodcut() {
   const { id } = useParams();
 
-  const product = products.find((p) => p._id === id);
+  const [product, setProduct] = useState([]);
+
+  useEffect(() => {
+    async function fetchProduct() {
+      const { data } = await axios.get(`/api/products/${id}`);
+      setProduct(data);
+    }
+
+    fetchProduct();
+  }, []);
 
   return (
     <div>
@@ -71,9 +79,14 @@ function Prodcut({ match }) {
               </ListGroup.Item>
 
               <ListGroup.Item>
-                <Button className="btn-block w-100" disabled = {product.countInStock === 0} type="button">Add to Cart</Button>
+                <Button
+                  className="btn-block w-100"
+                  disabled={product.countInStock === 0}
+                  type="button"
+                >
+                  Add to Cart
+                </Button>
               </ListGroup.Item>
-              
             </ListGroup>
           </Card>
         </Col>
