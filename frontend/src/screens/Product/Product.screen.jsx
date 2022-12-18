@@ -16,7 +16,7 @@ function Prodcut() {
     }
 
     fetchProduct();
-  }, []);
+  }, [id]);
 
   return (
     <div>
